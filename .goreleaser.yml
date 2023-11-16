@@ -1,0 +1,42 @@
+project_name: goreleaser-playground
+release:
+  # Disabling Github releases
+  disable: true
+
+builds:
+  - id: 'app1'
+    main: 'cmd/app1/main.go'
+    binary: 'app1'
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+
+  - id: 'app2'
+    main: 'cmd/app2/main.go'
+    binary: 'app2'
+    goos:
+      - linux
+    goarch:
+      - amd64
+      - arm64
+
+dockers:
+  - image_templates:
+      - 'zhiyanfoo/app1:{{ .Tag }}'
+    build_flag_templates:
+      - '--label=org.opencontainers.image.source=https://github.com/YOUR_GITHUB_USERNAME/YOUR_GITHUB_REPOSITORY_NAME'
+    skip_push: true
+    dockerfile: dockerfiles/Dockerfile.1
+    ids:
+      - 'app1'
+
+  - image_templates:
+      - 'zhiyanfoo/app2:{{ .Tag }}'
+    ids:
+      - 'app2'
+    build_flag_templates:
+      - '--label=org.opencontainers.image.source=https://github.com/YOUR_GITHUB_USERNAME/YOUR_GITHUB_REPOSITORY_NAME'
+    skip_push: true
+    dockerfile: dockerfiles/Dockerfile.2
